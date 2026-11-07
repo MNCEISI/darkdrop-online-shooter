@@ -1,0 +1,10 @@
+{
+  "name": "darkdrop-online",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Original browser-based multiplayer 3D tactical arena shooter prototype",
+  "engines": { "node": ">=20" },
+  "scripts": { "start": "node server.js", "test": "node --test tests/*.test.js" },
+  "dependencies": { "ws": "^8.18.3" }
+}
