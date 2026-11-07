@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#070d16">
+  <meta name="description" content="DARK//DROP — an original online multiplayer 3D tactical arena shooter prototype.">
+  <title>DARK//DROP | 3D Online Shooter</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"}}
+  </script>
+</head>
+<body>
+  <canvas id="game" aria-label="3D shooter game"></canvas>
+  <div class="noise"></div>
+
+  <section id="menu" class="menu">
+    <div class="menu-left">
+      <div class="eyebrow"><span class="live-dot"></span> MULTIPLAYER 3D COMBAT • V1 PROTOTYPE</div>
+      <div class="brand">DARK<span>//</span><br>DROP<sup>®</sup></div>
+      <div class="headline">NO BACKUP.<br><em>NO MERCY.</em><br>JUST THE ARENA.</div>
+      <p class="menu-desc">Drop into an original neon-industrial combat zone. Fight real players in shared rooms, or train against AI operatives.</p>
+      <div class="menu-flags"><span>3D WORLD</span><span>LIVE MULTIPLAYER</span><span>AI ENEMIES</span><span>MOBILE + PC</span></div>
+    </div>
+    <div class="menu-panel">
+      <div class="panel-heading"><span class="panel-num">01 / DEPLOYMENT</span><span class="small-spark">✦</span></div>
+      <h2>ENTER THE DROPZONE</h2>
+      <label for="nickname">CALLSIGN</label>
+      <input id="nickname" type="text" maxlength="17" autocomplete="off" spellcheck="false" placeholder="YOUR CALLSIGN" value="OPERATOR">
+      <label for="roomCode">ROOM CODE <span class="hint">SAME CODE = SAME ARENA</span></label>
+      <input id="roomCode" type="text" maxlength="18" autocomplete="off" spellcheck="false" placeholder="PUBLIC" value="PUBLIC">
+      <div class="split"><button id="join" class="primary">DEPLOY ONLINE <span>↗</span></button><button id="practice" class="secondary">AI TRAINING</button></div>
+      <button id="settingsToggle" class="settings-toggle">▸ SERVER SETTINGS / GRAPHICS</button>
+      <div id="settings" class="settings-panel" hidden>
+        <label for="serverUrl">MULTIPLAYER SERVER URL <span class="hint">BLANK = THIS SITE</span></label>
+        <input id="serverUrl" type="url" placeholder="https://your-game.onrender.com">
+        <label for="quality">GRAPHICS PRESET</label>
+        <select id="quality"><option value="high">HIGH — SHADOWS + EFFECTS</option><option value="low">PERFORMANCE — MOBILE</option></select>
+      </div>
+      <div id="menuMessage" class="menu-message">MATCHES INCLUDE AI UNTIL MORE PLAYERS JOIN.</div>
+      <div class="smallprint">ORIGINAL DEMO • NO REAL-MONEY PLAY • COMPETITIVE SECURITY NOT PRODUCTION READY</div>
+    </div>
+    <div class="menu-footer">DARK//DROP <span>© 2026 • ARENA PROTOTYPE • BUILD 01</span></div>
+  </section>
+
+  <div id="hud" class="hud hidden">
+    <div class="hud-top">
+      <div class="hud-brand">DARK<span>//</span>DROP</div>
+      <div class="room-info"><span class="blink"></span><span id="roomLabel">PUBLIC</span> <span class="pipe">|</span> <span id="onlineLabel">0</span> ONLINE <span class="pipe">|</span> <span id="latency">LIVE</span></div>
+      <div class="top-actions"><button id="scoreBtn" title="Scoreboard">☷ <span class="pc-label">SCOREBOARD</span></button><button id="soundBtn" title="Toggle sound">♫</button><button id="exitBtn" title="Leave match">✕</button></div>
+    </div>
+    <div class="hud-left">
+      <div class="signal">● LIVE OPERATION</div>
+      <h3>THE<br>DEADZONE</h3>
+      <div class="objective">ELIMINATE HOSTILES<br>HOLD YOUR GROUND</div>
+      <div id="killfeed" class="killfeed"></div>
+    </div>
+    <div class="hud-topright"><div class="stat-card"><div id="killCount" class="stat-value">00</div><div class="stat-title">ELIMINATIONS</div></div><div class="stat-card"><div id="deathCount" class="stat-value">00</div><div class="stat-title">DEATHS</div></div></div>
+    <div id="crosshair" class="crosshair"><i></i><i></i><i></i><i></i><b></b></div>
+    <div id="hitMarker" class="hitmarker">✕</div>
+    <div id="damageFlash" class="damage-flash"></div>
+    <div id="centerNotice" class="center-notice"></div>
+    <div id="elimination" class="elimination">TARGET ELIMINATED <span>+100</span></div>
+    <div id="respawn" class="respawn">OPERATIVE DOWN <span>REDEPLOYING…</span></div>
+    <div class="hud-bottom">
+      <div class="vitals"><div class="health-title"><span>OPERATIVE STATUS</span><b id="healthText">100 HP</b></div><div class="health-track"><div id="healthBar"></div></div><div class="armor-line"><span>SHIELD</span><div class="armor-track"><div id="armorBar"></div></div><b id="armorText">50</b></div></div>
+      <div class="weapon-status"><div class="weapon-title"><span>PRIMARY WEAPON</span><small id="weaponName">VORTEX AR</small></div><div class="ammo"><span id="ammo">30</span><span class="ammo-divider">/</span><span id="reserve">150</span></div><div id="reloadStatus" class="reload-status">AUTOMATIC • R TO RELOAD</div></div>
+    </div>
+    <div class="desktop-help">WASD MOVE <span>•</span> MOUSE AIM + FIRE <span>•</span> SHIFT SPRINT <span>•</span> SPACE JUMP <span>•</span> R RELOAD <span>•</span> 1 / 2 / 3 SWITCH <span>•</span> TAB SCORE</div>
+    <div class="weapon-picker"><button class="wp selected" data-weapon="rifle">1 <b>AR</b></button><button class="wp" data-weapon="smg">2 <b>SMG</b></button><button class="wp" data-weapon="dmr">3 <b>DMR</b></button></div>
+    <div id="touchControls" class="touch-controls"><div id="joystick" class="joystick"><div class="joystick-ring"></div><div id="stick" class="stick"></div></div><div id="lookArea" class="look-area"></div><button id="touchJump" class="touch-btn jump">JUMP</button><button id="touchReload" class="touch-btn reload">↻</button><button id="touchAim" class="touch-btn aim">ADS</button><button id="touchFire" class="touch-btn fire">FIRE <span>◎</span></button><button id="touchSprint" class="touch-btn sprint">RUN</button></div>
+    <div id="scoreboard" class="scoreboard hidden"><div class="score-head"><h2>MATCH ROSTER</h2><button id="closeScore">✕ CLOSE</button></div><div class="score-cols"><span>OPERATIVE</span><span>KILLS</span><span>DEATHS</span><span>STATUS</span></div><div id="scoreRows"></div><p>LIVE PLAYERS ARE MARKED HUMAN • AI OPERATIVES ARE MARKED BOT</p></div>
+  </div>
+
+  <script type="module" src="./game.js"></script>
+</body>
+</html>
